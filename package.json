@@ -1,0 +1,8 @@
+{
+    "name": "app",
+    "private": "true",
+    "author": "Avryl Rodrigues",
+    "dependencies": {
+        "express": "^5.1.0"
+    }
+}

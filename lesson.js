@@ -6,7 +6,7 @@ let lesson = [
         "Subject": "Music",             // Lesson name
         "Location": "Dubai",            // Lesson location
         "Price": 50,                    // Price
-        "Icon": "images/music.png",     // Lesson icon
+        "Icon": "static/music.png",     // Lesson icon
         "availableSeats": 5             // Number of available seats
     },
 
@@ -16,7 +16,7 @@ let lesson = [
         "Subject": "Football",
         "Location": "Abu Dhabi",
         "Price": 85,
-        "Icon": "images/football.png",
+        "Icon": "static/football.png",
         "availableSeats": 5
     },
 
@@ -26,7 +26,7 @@ let lesson = [
         "Subject": "Crafts",
         "Location": "Dubai",
         "Price": 30,
-        "Icon": "images/crafts.png",
+        "Icon": "static/crafts.png",
         "availableSeats": 5
     },
 
@@ -36,7 +36,7 @@ let lesson = [
         "Subject": "Gymnastics",
         "Location": "Sharjah",
         "Price": 40,
-        "Icon": "images/gymnastics.png",
+        "Icon": "static/gymnastics.png",
         "availableSeats": 5
     },
 
@@ -46,7 +46,7 @@ let lesson = [
         "Subject": "Cooking",
         "Location": "Abu Dhabi",
         "Price": 75,
-        "Icon": "images/cooking.png",
+        "Icon": "static/cooking.png",
         "availableSeats": 5
     },
 
@@ -56,7 +56,7 @@ let lesson = [
         "Subject": "Photography",
         "Location": "Dubai",
         "Price": 25,
-        "Icon": "images/photography.png",
+        "Icon": "static/photography.png",
         "availableSeats": 5
     },
 
@@ -66,7 +66,7 @@ let lesson = [
         "Subject": "Writing",
         "Location": "Ajman",
         "Price": 20,
-        "Icon": "images/writing.png",
+        "Icon": "static/writing.png",
         "availableSeats": 5
     },
 
@@ -76,7 +76,7 @@ let lesson = [
         "Subject": "Theatre",
         "Location": "Ras Al Khaimah",
         "Price": 60,
-        "Icon": "images/theatre.png",
+        "Icon": "static/theatre.png",
         "availableSeats": 5
     },
 
@@ -86,7 +86,7 @@ let lesson = [
         "Subject": "Badminton",
         "Location": "Abu Dhabi",
         "Price": 60,
-        "Icon": "images/badminton.png",
+        "Icon": "static/badminton.png",
         "availableSeats": 5
     },
 
@@ -96,7 +96,7 @@ let lesson = [
         "Subject": "Dance",
         "Location": "Sharjah",
         "Price": 50,
-        "Icon": "images/dance.png",
+        "Icon": "static/dance.png",
         "availableSeats": 5
     },
 
@@ -106,7 +106,7 @@ let lesson = [
         "Subject": "Gaming",
         "Location": "Ajman",
         "Price": 90,
-        "Icon": "images/gaming.png",
+        "Icon": "static/gaming.png",
         "availableSeats": 5
     },
 
@@ -116,7 +116,7 @@ let lesson = [
         "Subject": "Art",
         "Location": "Fujairah",
         "Price": 45,
-        "Icon": "images/art.png",
+        "Icon": "static/art.png",
         "availableSeats": 5
     },
 
@@ -126,7 +126,7 @@ let lesson = [
         "Subject": "Yoga",
         "Location": "Umm Al Quwain",
         "Price": 25,
-        "Icon": "images/yoga.png",
+        "Icon": "static/yoga.png",
         "availableSeats": 5
     },
 
@@ -136,7 +136,7 @@ let lesson = [
         "Subject": "Film Making",
         "Location": "Dubai",
         "Price": 100,
-        "Icon": "images/film-making.png",
+        "Icon": "static/film-making.png",
         "availableSeats": 5
     }
 ]
