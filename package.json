@@ -3,6 +3,7 @@
     "private": "true",
     "author": "Avryl Rodrigues",
     "dependencies": {
-        "express": "^5.1.0"
+        "express": "^5.1.0",
+        "mongodb": "^3.6.3"
     }
 }
