@@ -167,7 +167,7 @@
                     .then(data => {
                         this.lessons = data.map(lesson => {
                             // Build image path to match backend
-                            let imgName = lesson.Subject.toLowerCase() + '.png';
+                            let imgName = lesson.Subject.toLowerCase().replace(/\s+/g, '') + '.png';
                             lesson.Icon = 'https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/static/' + imgName;
                             return lesson;
                         });
