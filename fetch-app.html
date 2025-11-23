@@ -6,12 +6,12 @@
 </head>
 
 <body>
-    <code>{title: "New Lesson", price: 50}</code>    
+    <code>{Subject: "New Lesson", Location: "New Location", Price: 50, availableSeats: 5}</code>    
     <p>The response: <span id="response"></span></p>
     <p>Error: <span id="error"></span></p>
 
     <script>
-        const newProduct = {title: "New Lesson", price: 50};
+        const newProduct = {Subject: "New Lesson", Location: "New Location", Price: 50, availableSeats: 5};
 
         fetch('https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons', {
             method: "POST",
