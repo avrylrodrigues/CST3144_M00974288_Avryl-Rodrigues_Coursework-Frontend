@@ -165,9 +165,12 @@
                 fetch("https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons")
                     .then(response => response.json())
                     .then(data => {
-                        // Map lessons and add Icon property based on Subject
                         this.lessons = data.map(lesson => {
-                            lesson.Icon = '/static/' + lesson.Subject.toLowerCase() + '.png';
+                            // Remove spaces and lowercase to match your static filenames
+                            let imgName = lesson.Subject.toLowerCase().replace(/\s+/g, '') + '.png';
+                            lesson.Icon = '/' + imgName; // <- no /static/ prefix
+                            lesson.availableSeats = Number(lesson.availableSeats);
+                            return lesson;
                         });
                     })
                     .catch(err => console.error("Error fetching lessons:", err));
