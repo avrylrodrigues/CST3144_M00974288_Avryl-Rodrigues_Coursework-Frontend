@@ -168,9 +168,6 @@
                         // Map lessons and add Icon property based on Subject
                         this.lessons = data.map(lesson => {
                             lesson.Icon = '/static/' + lesson.Subject.toLowerCase() + '.png';
-                            // Ensure availableSeats is a number
-                            lesson.availableSeats = Number(lesson.availableSeats);
-                            return lesson;
                         });
                     })
                     .catch(err => console.error("Error fetching lessons:", err));
@@ -216,34 +213,45 @@
                 },
                 // Return lessons sorted based on filter and sort order
                 sortedLessons() {
-                    // Make a shallow copy to avoid mutating original array
                     let list = this.lessons.slice();
-
-                    if (this.filterType === "Subject") {
-                        list.sort((a, b) => this.sortOrder === "ascending" 
-                            ? a.Subject.localeCompare(b.Subject)
-                            : b.Subject.localeCompare(a.Subject)
-                        );
+                    if (this.filterType == "Subject") {
+                        if (this.sortOrder == "ascending") {
+                            list.sort(function(a, b){
+                                if (a.Subject > b.Subject) return 1;
+                                if (a.Subject < b.Subject) return -1;
+                                return 0;
+                            });
+                        } else {
+                            list.sort(function(a, b){
+                                if (a.Subject < b.Subject) return 1;
+                                if (a.Subject > b.Subject) return -1;
+                                return 0;
+                            });
+                        }
                     } 
-                    else if (this.filterType === "Location") {
-                        list.sort((a, b) => this.sortOrder === "ascending" 
-                            ? a.Location.localeCompare(b.Location)
-                            : b.Location.localeCompare(a.Location)
-                        );
+                    else if (this.filterType == "Location") {
+                        if (this.sortOrder == "ascending") {
+                            list.sort(function(a, b){
+                                if (a.Location > b.Location) return 1;
+                                if (a.Location < b.Location) return -1;
+                                return 0;
+                            });
+                        } else {
+                            list.sort(function(a, b){
+                                if (a.Location < b.Location) return 1;
+                                if (a.Location > b.Location) return -1;
+                                return 0;
+                            });
+                        }
                     } 
-                    else if (this.filterType === "Price") {
-                        list.sort((a, b) => this.sortOrder === "ascending" 
-                            ? a.Price - b.Price 
-                            : b.Price - a.Price
-                        );
+                    else if (this.filterType == "Price") {
+                        if (this.sortOrder == "ascending") list.sort((a, b) => a.Price - b.Price);
+                        else list.sort((a, b) => b.Price - a.Price);
                     } 
-                    else if (this.filterType === "availableSeats") {
-                        list.sort((a, b) => this.sortOrder === "ascending" 
-                            ? a.availableSeats - b.availableSeats 
-                            : b.availableSeats - a.availableSeats
-                        );
+                    else if (this.filterType == "availableSeats") {
+                        if (this.sortOrder == "ascending") list.sort((a, b) => a.availableSeats - b.availableSeats);
+                        else list.sort((a, b) => b.availableSeats - a.availableSeats);
                     }
-
                     return list;
                 },
                 // Check if cart is empty
