@@ -161,6 +161,13 @@
                     email: ""
                 }
             },
+            created() {
+                fetch("https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons")
+                    .then(response => response.json())
+                    .then(data => {
+                        this.lessons = data;
+                    });
+            },
             methods:{
                 // Add lesson to cart
                 addToCart(lesson){
