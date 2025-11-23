@@ -167,9 +167,8 @@
                     .then(data => {
                         this.lessons = data.map(lesson => {
                             // Build image path to match backend
-                            let imgName = lesson.Subject.toLowerCase().replace(/\s+/g, '') + '.png';
-                            lesson.Icon = '/' + imgName; // <-- do NOT add /static/
-                            
+                            let imgName = lesson.Subject.toLowerCase() + '.png';
+                            lesson.Icon = '/static/' + imgName;
                             return lesson;
                         });
                     })
