@@ -167,6 +167,9 @@
                     .then(data => {
                         this.lessons = data;
                     });
+                this.lessons.forEach(lesson => {
+                    lesson.Icon = '/' + lesson.Subject.toLowerCase() + '.png';
+                });
             },
             methods:{
                 // Add lesson to cart
@@ -209,7 +212,7 @@
                 },
                 // Return lessons sorted based on filter and sort order
                 sortedLessons(){
-                    let list = this.lessons;
+                    let list = this.lessons.slice();
                     if (this.filterType == "Subject"){
                         if (this.sortOrder == "ascending"){
                             list.sort(function(a, b){
