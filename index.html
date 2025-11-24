@@ -165,10 +165,10 @@
                 fetch("https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons")
                     .then(response => response.json())
                     .then(data => {
-                        this.lessons = data.map(lesson => {
-                            lesson.Icon = 'https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/' + lesson.Icon;
-                            return lesson;
-                        });
+                        this.lessons = data.map(lesson => ({
+                            ...lesson,
+                            Icon:'https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/' + lesson.Icon
+                        }));
                     })
                     .catch(err => console.error("Error fetching lessons:", err));
             },
