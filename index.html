@@ -249,8 +249,8 @@
                         else list.sort((a, b) => b.Price - a.Price);
                     } 
                     else if (this.filterType == "availableSeats") {
-                        if (this.sortOrder == "ascending") list.sort((a, b) => a.availableSeats - b.availableSeats);
-                        else list.sort((a, b) => b.availableSeats - a.availableSeats);
+                        if (this.sortOrder == "ascending") list.sort((a, b) => (a.availableSeats - cartCount(a.id)) - (b.availableSeats - cartCount(b.id)));
+                        else list.sort((a, b) => (b.availableSeats - cartCount(b.id)) - (a.availableSeats - cartCount(a.id)));
                     }
                     return list;
                 },
