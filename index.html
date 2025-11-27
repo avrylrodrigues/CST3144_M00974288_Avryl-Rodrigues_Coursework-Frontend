@@ -175,6 +175,7 @@
             methods:{
                 // Add lesson to cart
                 addToCart(lesson) {
+                    this.cart.push(lesson._id);  // push string _id
                     lesson.availableSeats--;
                     fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                         method: "PUT",
@@ -184,7 +185,6 @@
                     .then(r => r.json())
                     .then(console.log)
                     .catch(console.error);
-                    this.cart.push(lesson._id);  // push string _id
                 },
                 // Toggle between lesson and checkout view
                 showCheckout(){
