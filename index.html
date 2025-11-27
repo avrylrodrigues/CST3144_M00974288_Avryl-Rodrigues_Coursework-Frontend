@@ -181,7 +181,9 @@
                         body: JSON.stringify({ availableSeats: lesson.availableSeats - this.cartCount(lesson.id) })
                     })
                     .then(r => r.json())
-                    .then(console.log)
+                    .then(resJSON => {
+                        console.log(resJSON);
+                    })
                     .catch(console.error);
                     this.cart.push(lesson._id);
                 },
