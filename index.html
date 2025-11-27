@@ -175,18 +175,16 @@
             methods:{
                 // Add lesson to cart
                 addToCart(lesson) {
-                    if (lesson.availableSeats > 0) {
-                        lesson.availableSeats--;
-                        fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
-                            method: "PUT",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ availableSeats: lesson.availableSeats })
-                        })
-                        .then(r => r.json())
-                        .then(console.log)
-                        .catch(console.error);
-                        this.cart.push(lesson.id);
-                    }
+                    this.cart.push(lesson.id);
+                    const newSeats = lesson.availableSeats - this.cartCount(lesson.id);
+                    fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ availableSeats: newSeats })
+                    })
+                    .then(r => r.json())
+                    .then(console.log)
+                    .catch(console.error);
                 },
                 // Toggle between lesson and checkout view
                 showCheckout(){
@@ -249,11 +247,13 @@
                     const index = this.cart.indexOf(lesson.id);
                     if (index !== -1) {
                         this.cart.splice(index, 1);
-                        lesson.availableSeats++;
+
+                        const newSeats = lesson.availableSeats - this.cartCount(lesson.id);
+
                         fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                             method: "PUT",
                             headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ availableSeats: lesson.availableSeats })
+                            body: JSON.stringify({ availableSeats: newSeats })
                         })
                         .then(r => r.json())
                         .then(console.log)
