@@ -58,7 +58,7 @@
                     <h2 v-text="lesson.Subject"></h2>
                     <p> Location: {{lesson.Location}} </p>
                     <p> Price: {{lesson.Price}} </p>
-                    <p>Available seats: {{lesson.availableSeats}}</p>
+                    <p>Available seats: {{lesson.availableSeats - cartCount(lesson.id)}}</p>
 
                     <!-- Add to cart button -->
                     <button v-on:click="addToCart(lesson)" v-if="canAddToCart(lesson)">
@@ -74,7 +74,7 @@
                             All Full!
                         </span>
                         <span v-else-if="lesson.availableSeats < 5">
-                            Only {{lesson.availableSeats}} seats left!
+                            Only {{5 - cartCount(lesson.id)}} seats left!
                         </span>
                         <span v-else>
                             Book Now!
