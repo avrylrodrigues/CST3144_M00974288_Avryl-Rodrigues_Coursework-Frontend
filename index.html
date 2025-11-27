@@ -175,8 +175,8 @@
             methods:{
                 // Add lesson to cart
                 addToCart(lesson) {
-                    this.cart.push(lesson._id);
-                    fetch('https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/'+lesson._id, {
+                    this.cart.push(lesson.id);
+                    fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                         method: "PUT",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ availableSeats: lesson.availableSeats - this.cartCount(lesson.id) })
@@ -184,7 +184,6 @@
                     .then(r => r.json())
                     .then(resJSON => {
                         console.log(resJSON);
-                        console.log("fetch url:" + 'https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/'+lesson._id);
                     })
                     .catch(console.error);
                 },
@@ -227,7 +226,7 @@
                 },
                 // Check if lesson can be added to cart
                 canAddToCart(lesson){
-                    return lesson.availableSeats > this.cartCount(lesson._id);
+                    return lesson.availableSeats > this.cartCount(lesson.id);
                 },
                 // Count number of a specific lessons in cart
                 cartCount(id){
@@ -240,10 +239,10 @@
                 },
                 // Remove a lesson from cart
                 removeFromCart(lesson) {
-                    const index = this.cart.indexOf(lesson._id);
+                    const index = this.cart.indexOf(lesson.id);
                     if (index !== -1) {
                         this.cart.splice(index, 1);
-                        fetch("https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/" + lesson._id, {
+                        fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                             method: "PUT",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ availableSeats: lesson.availableSeats - this.cartCount(lesson.id)})
@@ -329,7 +328,7 @@
                     let lessonsInCart = [];
                     for (let i = 0; i < this.lessons.length; i++){
                         let lesson = this.lessons[i];
-                        if (this.cart.includes(lesson._id))
+                        if (this.cart.includes(lesson.id))
                             lessonsInCart.push(lesson);
                     }
                     return lessonsInCart;
