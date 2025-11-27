@@ -225,7 +225,7 @@
                 },
                 // Check if lesson can be added to cart
                 canAddToCart(lesson){
-                    return lesson.availableSeats>this.cartCount(lesson.id);
+                    return lesson.availableSeats > this.cartCount(lesson._id);
                 },
                 // Count number of a specific lessons in cart
                 cartCount(id){
@@ -328,7 +328,7 @@
                     let lessonsInCart = [];
                     for (let i = 0; i < this.lessons.length; i++){
                         let lesson = this.lessons[i];
-                        if (this.cart.includes(lesson.id))
+                        if (this.cart.includes(lesson._id))
                             lessonsInCart.push(lesson);
                     }
                     return lessonsInCart;
