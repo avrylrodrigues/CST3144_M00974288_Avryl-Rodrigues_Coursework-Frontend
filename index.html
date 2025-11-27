@@ -175,11 +175,10 @@
             methods:{
                 // Add lesson to cart
                 addToCart(lesson) {
-                    lesson.availableSeats--;
                     fetch("https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/" + lesson._id, {
                         method: "PUT",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ availableSeats: lesson.availableSeats })
+                        body: JSON.stringify({ availableSeats: lesson.availableSeats - cartCount(lesson.id) })
                     })
                     .then(r => r.json())
                     .then(console.log)
@@ -241,11 +240,10 @@
                     const index = this.cart.indexOf(lesson._id);
                     if (index !== -1) {
                         this.cart.splice(index, 1);
-                        lesson.availableSeats++;
                         fetch("https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/" + lesson._id, {
                             method: "PUT",
                             headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ availableSeats: lesson.availableSeats })
+                            body: JSON.stringify({ availableSeats: cartCount(lesson.id) })
                         })
                         .then(r => r.json())
                         .then(console.log)
