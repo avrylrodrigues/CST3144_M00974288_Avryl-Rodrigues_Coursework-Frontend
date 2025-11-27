@@ -58,7 +58,7 @@
                     <h2 v-text="lesson.Subject"></h2>
                     <p> Location: {{lesson.Location}} </p>
                     <p> Price: {{lesson.Price}} </p>
-                    <p> Available seats: {{lesson.availableSeats - cartCount(lesson.id)}} </p>
+                    <p>Available seats: {{lesson.availableSeats}}</p>
 
                     <!-- Add to cart button -->
                     <button v-on:click="addToCart(lesson)" v-if="canAddToCart(lesson)">
@@ -177,13 +177,14 @@
                 addToCart(lesson) {
                     if (lesson.availableSeats > 0) {
                         lesson.availableSeats--;
-
                         fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                             method: "PUT",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ availableSeats: lesson.availableSeats })
-                        });
-
+                        })
+                        .then(r => r.json())
+                        .then(console.log)
+                        .catch(console.error);
                         this.cart.push(lesson.id);
                     }
                 },
@@ -253,7 +254,10 @@
                             method: "PUT",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ availableSeats: lesson.availableSeats })
-                        });
+                        })
+                        .then(r => r.json())
+                        .then(console.log)
+                        .catch(console.error);
                     }
                 }
             },
