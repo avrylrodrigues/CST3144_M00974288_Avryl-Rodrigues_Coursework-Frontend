@@ -70,10 +70,10 @@
 
                     <!-- Update messages based on seat availability -->
                     <div class="update-messages">
-                        <span v-if="lesson.availableSeats === 0">
+                        <span v-if="lesson.availableSeats - cartCount(lesson.id) <= 0">
                             All Full!
                         </span>
-                        <span v-else-if="lesson.availableSeats < 5">
+                        <span v-else-if="lesson.availableSeats - cartCount(lesson.id) < 5">
                             Only {{lesson.availableSeats - cartCount(lesson.id)}} seats left!
                         </span>
                         <span v-else>
@@ -175,11 +175,10 @@
                 // Add lesson to cart
                 addToCart(lesson) {
                     this.cart.push(lesson.id);
-                    lesson.availableSeats -= 1;
                     fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                         method: "PUT",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ availableSeats: lesson.availableSeats - this.cartCount(lesson.id) })
+                        body: JSON.stringify({ availableSeats: lesson.availableSeats - 1 })
                     })
                     .then(r => r.json())
                     .then(resJSON => {
@@ -198,7 +197,7 @@
                     for (let i = 0; i < this.cart.length; i++) {
                         for (let j = 0; j < this.lessons.length; j++) {
                             if (this.cart[i] === this.lessons[j].id) {
-                                lessonNames.push(this.lessons[j].title);
+                                lessonNames.push(this.lessons[j].Subject);
                             }
                         }
                     }
@@ -265,11 +264,10 @@
                     const index = this.cart.indexOf(lesson.id);
                     if (index !== -1) {
                         this.cart.splice(index, 1);
-                        lesson.availableSeats += 1;
                         fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                             method: "PUT",
                             headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ availableSeats: lesson.availableSeats - this.cartCount(lesson.id)})
+                            body: JSON.stringify({ availableSeats: lesson.availableSeats + 1})
                         })
                         .then(r => r.json())
                         .then(console.log)
