@@ -74,7 +74,7 @@
                             All Full!
                         </span>
                         <span v-else-if="lesson.availableSeats < 5">
-                            Only {{5 - cartCount(lesson.id)}} seats left!
+                            Only {{lesson.availableSeats - cartCount(lesson.id)}} seats left!
                         </span>
                         <span v-else>
                             Book Now!
