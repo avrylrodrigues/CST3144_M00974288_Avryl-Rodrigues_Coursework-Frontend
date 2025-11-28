@@ -192,11 +192,21 @@
                 },
                 // Handle checkout submission
                 submitForm() {
+                    // Get lesson names the simple way
+                    let lessonNames = [];
+                    for (let i = 0; i < this.cart.length; i++) {
+                        for (let j = 0; j < this.lessons.length; j++) {
+                            if (this.cart[i] === this.lessons[j]._id) {
+                                lessonNames.push(this.lessons[j].title);
+                            }
+                        }
+                    }
                     const order = {
                         name: this.order.fullName,
                         phone: this.order.phoneNumber,
                         email: this.order.email,
                         lessonIDs: this.cart,
+                        lessonNames: lessonNames,
                         spaces: this.cart.length
                     };
                     fetch("https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Orders", {
