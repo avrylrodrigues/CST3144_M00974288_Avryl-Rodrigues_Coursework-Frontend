@@ -167,7 +167,6 @@
                     .then(data => {
                         this.lessons = data.map(lesson =>({
                             ...lesson,
-                            originalSeats: lesson.availableSeats,
                             Icon:"https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/" + lesson.Icon
                         }));
                     })
@@ -175,20 +174,16 @@
             },
             methods: {
                 // Add lesson to cart
-                addToCart(lesson){
+                addToCart(lesson) {
                     this.cart.push(lesson.id);
-                    let newSeats = lesson.originalSeats - this.cartCount(lesson.id) - 1;
                     fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                         method: "PUT",
                         headers: {"Content-Type": "application/json"},
-                        body: JSON.stringify({availableSeats: lesson.availableSeats - 1})
+                        body: JSON.stringify({ availableSeats: lesson.availableSeats - 1 })
                     })
-                    // .then(r => r.json())
-                    // .then(resJSON => {
-                    //     console.log(resJSON);
-                    // })
-                    // .catch(console.error);
-                    lesson.originalSeats = newSeats;
+                    .then(() => {
+                        lesson.availableSeats -= 1;
+                    });
                 },
                 // Toggle between lesson and checkout view
                 showCheckout(){
@@ -218,18 +213,6 @@
                         method: "POST",
                         headers: {"Content-Type": "application/json"},
                         body: JSON.stringify(order)
-                    })
-                    .then(() => {
-                        alert("Registration successful!");
-                        // Reset seats in database
-                        let resetSeats = this.lessons.map(lesson => {
-                            return fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
-                                method: "PUT",
-                                headers: {"Content-Type": "application/json"},
-                                body: JSON.stringify({ availableSeats: 5 })
-                            });
-                        });
-                        return Promise.all(resetSeats);
                     })
                     .then(() => {
                         // Clear cart and form
@@ -265,27 +248,18 @@
                     return count;
                 },
                 // Remove a lesson from cart
-                removeFromCart(lesson){
-                    // const index = this.cart.indexOf(lesson.id);
-                    // if (index !== -1){
-                    //     this.cart.splice(index, 1);
-                    //     fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
-                    //         method: "PUT",
-                    //         headers: { "Content-Type": "application/json" },
-                    //         body: JSON.stringify({ availableSeats: lesson.availableSeats + 1})
-                    //     })
-                    //     .then(r => r.json())
-                    //     .then(console.log)
-                    //     .catch(console.error);
-                    // }
-                    let newSeats = lesson.originalSeats - this.cartCount(lesson.id) + 1;
+                removeFromCart(lesson) {
+                    let index = this.cart.indexOf(lesson.id);
+                    if (index > -1) this.cart.splice(index, 1);
                     fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                         method: "PUT",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ availableSeats: lesson.availableSeats + 1})
+                        body: JSON.stringify({ availableSeats: lesson.availableSeats + 1 })
                     })
-                    lesson.originalSeats = newSeats;
-                }
+                    .then(() => {
+                        lesson.availableSeats += 1;
+                    });
+                    }
             },
             computed: {
                 // Return number of items in cart
