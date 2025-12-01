@@ -167,6 +167,7 @@
                     .then(data => {
                         this.lessons = data.map(lesson =>({
                             ...lesson,
+                            originalSeats: lesson.availableSeats,
                             Icon:"https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/" + lesson.Icon
                         }));
                     })
@@ -174,20 +175,18 @@
             },
             methods: {
                 // Add lesson to cart
-                addToCart(lesson) {
+                addToCart(lesson){
+                    this.cart.push(lesson.id);
                     fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                         method: "PUT",
                         headers: {"Content-Type": "application/json"},
-                        body: JSON.stringify({ availableSeats: lesson.availableSeats - 1})
+                        body: JSON.stringify({availableSeats: lesson.availableSeats - 1})
                     })
-                    .then(response => response.json())
-                    .then(updatedLesson => {
-                        // Update the local lesson object with the latest seats from the backend
-                        lesson.availableSeats = updatedLesson.availableSeats;
-                        // Add lesson to cart
-                        this.cart.push(lesson.id);
+                    .then(r => r.json())
+                    .then(resJSON => {
+                        console.log(resJSON);
                     })
-                    .catch(err => console.error("Error updating seats:", err));
+                    .catch(console.error);
                 },
                 // Toggle between lesson and checkout view
                 showCheckout(){
@@ -217,6 +216,18 @@
                         method: "POST",
                         headers: {"Content-Type": "application/json"},
                         body: JSON.stringify(order)
+                    })
+                    .then(() => {
+                        alert("Registration successful!");
+                        // Reset seats in database
+                        let resetSeats = this.lessons.map(lesson => {
+                            return fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
+                                method: "PUT",
+                                headers: {"Content-Type": "application/json"},
+                                body: JSON.stringify({ availableSeats: 5 })
+                            });
+                        });
+                        return Promise.all(resetSeats);
                     })
                     .then(() => {
                         // Clear cart and form
@@ -252,21 +263,19 @@
                     return count;
                 },
                 // Remove a lesson from cart
-                removeFromCart(lesson) {
-                    fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
-                        method: "PUT",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ availableSeats: lesson.availableSeats + 1})
-                    })
-                    .then(response => response.json())
-                    .then(updatedLesson => {
-                        // Update the local lesson object
-                        lesson.availableSeats = updatedLesson.availableSeats;
-                        // Remove from cart
-                        let index = this.cart.indexOf(lesson.id);
-                        if (index > -1) this.cart.splice(index, 1);
-                    })
-                    .catch(err => console.error("Error updating seats:", err));
+                removeFromCart(lesson){
+                    const index = this.cart.indexOf(lesson.id);
+                    if (index !== -1){
+                        this.cart.splice(index, 1);
+                        fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
+                            method: "PUT",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ availableSeats: lesson.availableSeats + 1})
+                        })
+                        .then(r => r.json())
+                        .then(console.log)
+                        .catch(console.error);
+                    }
                 }
             },
             computed: {
