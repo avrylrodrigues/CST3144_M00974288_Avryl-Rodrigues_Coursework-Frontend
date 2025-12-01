@@ -182,12 +182,6 @@
                         headers: {"Content-Type": "application/json"},
                         body: JSON.stringify({availableSeats: lesson.availableSeats - 1})
                     })
-                    .then(r => r.json())
-                    .then(resJSON => {
-                        console.log(resJSON);
-                        // Update local data to match the DB
-                        lesson.availableSeats -= 1;
-                    })
                     .catch(console.error);
                 },
                 // Toggle between lesson and checkout view
@@ -273,12 +267,6 @@
                             method: "PUT",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ availableSeats: lesson.availableSeats + 1})
-                        })
-                        .then(r => r.json())
-                        .then(resJSON => {
-                            console.log(resJSON);
-                            // Update local data to match the DB
-                            lesson.availableSeats += 1;
                         })
                         .catch(console.error);
                     }
