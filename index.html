@@ -175,7 +175,6 @@
             methods: {
                 // Add lesson to cart
                 addToCart(lesson) {
-                    this.cart.push(lesson.id);
                     fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                         method: "PUT",
                         headers: {"Content-Type": "application/json"},
@@ -254,8 +253,6 @@
                 },
                 // Remove a lesson from cart
                 removeFromCart(lesson) {
-                    let index = this.cart.indexOf(lesson.id);
-                    if (index > -1) this.cart.splice(index, 1);
                     fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                         method: "PUT",
                         headers: { "Content-Type": "application/json" },
