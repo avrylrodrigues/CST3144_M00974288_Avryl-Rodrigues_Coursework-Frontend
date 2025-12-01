@@ -193,7 +193,6 @@
                 addToCart(lesson){
                     if (!this.canAddToCart(lesson) || this.isUpdating) return;  // Prevent invalid/rapid adds
                     this.isUpdating = true;
-                    this.cart.push(lesson.id);  // Optimistic add
                     fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                         method: "PUT",
                         headers: {"Content-Type": "application/json"},
@@ -203,11 +202,12 @@
                     .then(resJSON => {
                         console.log(resJSON);
                         this.fetchLessons();  // Refetch after success
+                        this.cart.push(lesson.id);  // Now update cart
                         this.isUpdating = false;
                     })
                     .catch(err => {
                         console.error(err);
-                        this.cart.pop();  // Revert on failure
+                        // No revert needed since cart wasn't updated early
                         this.isUpdating = false;
                     });
                 },
@@ -290,8 +290,7 @@
                     if (this.isUpdating) return;  // Prevent during updates
                     const index = this.cart.indexOf(lesson.id);
                     if (index === -1) return;
-                    this.isUpdating = true;
-                    this.cart.splice(index, 1);  // Optimistic remove
+                    this.isUpdating = true;  // Added: Set loading
                     fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                         method: "PUT",
                         headers: { "Content-Type": "application/json" },
@@ -301,11 +300,12 @@
                     .then(resJSON => {
                         console.log(resJSON);
                         this.fetchLessons();  // Refetch after success
+                        this.cart.splice(index, 1);  // Now remove from cart
                         this.isUpdating = false;
                     })
                     .catch(err => {
                         console.error(err);
-                        this.cart.splice(index, 0, lesson.id);  // Revert on failure
+                        // No revert needed since cart wasn't updated early
                         this.isUpdating = false;
                     });
                 }
