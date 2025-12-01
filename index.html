@@ -333,21 +333,6 @@
                     }
                     else if (this.filterType == "availableSeats"){
                         if (this.sortOrder == "ascending"){
-                            list.sort(function(a, b){
-                                if (a.availableSeats > b.availableSeats) return 1;
-                                if (a.availableSeats < b.availableSeats) return -1;
-                                return 0;
-                            });
-                        } else{
-                            list.sort(function(a, b){
-                                if (a.availableSeats < b.availableSeats) return 1;
-                                if (a.availableSeats > b.availableSeats) return -1;
-                                return 0;
-                            });
-                        }
-                    }
-                    else if (this.filterType == "availableSeats"){
-                        if (this.sortOrder == "ascending"){
                             list.sort((a, b) => (a.availableSeats - this.cartCount(a.id)) - (b.availableSeats - this.cartCount(b.id)));
                         } else{
                             list.sort((a, b) => (b.availableSeats - this.cartCount(b.id)) - (a.availableSeats - this.cartCount(a.id)));
