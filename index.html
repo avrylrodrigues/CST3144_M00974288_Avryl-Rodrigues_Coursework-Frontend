@@ -174,15 +174,39 @@
                     .catch(err => console.error("Error fetching lessons:", err));
             },
             methods: {
+                // Fetch lessons from DB
+                fetchLessons(){
+                    fetch("https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons")
+                        .then(response => response.json())
+                        .then(data => {
+                            this.lessons = data.map(lesson => ({
+                                ...lesson,
+                                originalSeats: lesson.availableSeats,
+                                Icon: "https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/" + lesson.Icon
+                            }));
+                        })
+                        .catch(err => console.error("Error refetching lessons:", err));
+                },
                 // Add lesson to cart
                 addToCart(lesson){
+                    if (!this.canAddToCart(lesson)) return;  // Prevent invalid adds
                     this.cart.push(lesson.id);
                     fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                         method: "PUT",
                         headers: {"Content-Type": "application/json"},
                         body: JSON.stringify({availableSeats: lesson.availableSeats - 1})
                     })
-                    .catch(console.error);
+                    .then(r => r.json())
+                    .then(resJSON => {
+                        console.log(resJSON);
+                        // Refetch to sync with DB
+                        this.fetchLessons();
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        // Revert cart on failure
+                        this.cart.pop();
+                    });
                 },
                 // Toggle between lesson and checkout view
                 showCheckout(){
@@ -261,15 +285,24 @@
                 // Remove a lesson from cart
                 removeFromCart(lesson){
                     const index = this.cart.indexOf(lesson.id);
-                    if (index !== -1){
-                        this.cart.splice(index, 1);
-                        fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
-                            method: "PUT",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ availableSeats: lesson.availableSeats + 1})
-                        })
-                        .catch(console.error);
-                    }
+                    if (index === -1) return;
+                    this.cart.splice(index, 1);
+                    fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ availableSeats: lesson.availableSeats + 1})
+                    })
+                    .then(r => r.json())
+                    .then(resJSON => {
+                        console.log(resJSON);
+                        // Refetch to sync with DB
+                        this.fetchLessons();
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        // Revert cart on failure
+                        this.cart.splice(index, 0, lesson.id);
+                    });
                 }
             },
             computed: {
