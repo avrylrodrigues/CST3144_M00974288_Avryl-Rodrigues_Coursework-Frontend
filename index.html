@@ -180,7 +180,7 @@
                     fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                         method: "PUT",
                         headers: {"Content-Type": "application/json"},
-                        body: JSON.stringify({ availableSeats: lesson.availableSeats - 1 })
+                        body: JSON.stringify({ availableSeats: lesson.availableSeats})
                     });
                 },
                 // Toggle between lesson and checkout view
@@ -253,7 +253,7 @@
                     fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                         method: "PUT",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ availableSeats: lesson.availableSeats + 1 })
+                        body: JSON.stringify({ availableSeats: lesson.availableSeats})
                     });
                 }
             },
