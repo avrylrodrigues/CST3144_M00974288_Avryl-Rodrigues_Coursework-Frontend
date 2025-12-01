@@ -151,8 +151,6 @@
                 showLesson: true,
                 // Selected filter type
                 filterType: "",
-                // Prevents rapid clicks
-                isUpdating: false,
                 // Sort order
                 sortOrder: "ascending",
                 // Customer order info
@@ -176,41 +174,15 @@
                     .catch(err => console.error("Error fetching lessons:", err));
             },
             methods: {
-                // Fetch lessons from DB
-                fetchLessons(){
-                    return fetch("https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons")
-                        .then(response => response.json())
-                        .then(data => {
-                            this.lessons = data.map(lesson => ({
-                                ...lesson,
-                                originalSeats: lesson.availableSeats,
-                                Icon: "https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/" + lesson.Icon
-                            }));
-                        })
-                        .catch(err => console.error("Error refetching lessons:", err));
-                },
                 // Add lesson to cart
                 addToCart(lesson){
-                    if (!this.canAddToCart(lesson) || this.isUpdating) return;
-                    this.isUpdating = true;
+                    this.cart.push(lesson.id);
                     fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                         method: "PUT",
                         headers: {"Content-Type": "application/json"},
                         body: JSON.stringify({availableSeats: lesson.availableSeats - 1})
                     })
-                    .then(r => r.json())
-                    .then(resJSON => {
-                        console.log(resJSON);
-                        return this.fetchLessons();  // Wait for refetch
-                    })
-                    .then(() => {
-                        this.cart.push(lesson.id);  // Now update cart
-                        this.isUpdating = false;
-                    })
-                    .catch(err => {
-                        console.error(err);
-                        this.isUpdating = false;
-                    });
+                    .catch(console.error);
                 },
                 // Toggle between lesson and checkout view
                 showCheckout(){
@@ -288,28 +260,16 @@
                 },
                 // Remove a lesson from cart
                 removeFromCart(lesson){
-                    if (this.isUpdating) return;
                     const index = this.cart.indexOf(lesson.id);
-                    if (index === -1) return;
-                    this.isUpdating = true;
-                    fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
-                        method: "PUT",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ availableSeats: lesson.availableSeats + 1})
-                    })
-                    .then(r => r.json())
-                    .then(resJSON => {
-                        console.log(resJSON);
-                        return this.fetchLessons();  // Wait for refetch
-                    })
-                    .then(() => {
-                        this.cart.splice(index, 1);  // Now update cart
-                        this.isUpdating = false;
-                    })
-                    .catch(err => {
-                        console.error(err);
-                        this.isUpdating = false;
-                    });
+                    if (index !== -1){
+                        this.cart.splice(index, 1);
+                        fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
+                            method: "PUT",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ availableSeats: lesson.availableSeats + 1})
+                        })
+                        .catch(console.error);
+                    }
                 }
             },
             computed: {
@@ -387,8 +347,8 @@
                         return true;
                     for (let i = 0; i < name.length; i++){
                         let char = name[i];
-                        if (!((char >= 'A' && char <= 'Z') || (char >= 'a' && char <= 'z') || char === ' '))
-                            return true;
+                            if (!((char >= 'A' && char <= 'Z') || (char >= 'a' && char <= 'z') || char === ' '))
+                                return true;
                     }
                     if (isNaN(phone) || phone.length !== 10)
                         return true;
