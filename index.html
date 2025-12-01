@@ -176,17 +176,19 @@
             methods: {
                 // Add lesson to cart
                 addToCart(lesson){
-                    this.cart.push(lesson.id);
+                    // this.cart.push(lesson.id);
+                    let newSeats = lesson.originalSeats - this.cartCount(lesson.id) - 1;
                     fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                         method: "PUT",
                         headers: {"Content-Type": "application/json"},
                         body: JSON.stringify({availableSeats: lesson.availableSeats - 1})
                     })
-                    .then(r => r.json())
-                    .then(resJSON => {
-                        console.log(resJSON);
-                    })
-                    .catch(console.error);
+                    // .then(r => r.json())
+                    // .then(resJSON => {
+                    //     console.log(resJSON);
+                    // })
+                    // .catch(console.error);
+                    lesson.originalSeats = newSeats;
                 },
                 // Toggle between lesson and checkout view
                 showCheckout(){
@@ -264,18 +266,25 @@
                 },
                 // Remove a lesson from cart
                 removeFromCart(lesson){
-                    const index = this.cart.indexOf(lesson.id);
-                    if (index !== -1){
-                        this.cart.splice(index, 1);
-                        fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
-                            method: "PUT",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ availableSeats: lesson.availableSeats + 1})
-                        })
-                        .then(r => r.json())
-                        .then(console.log)
-                        .catch(console.error);
-                    }
+                    // const index = this.cart.indexOf(lesson.id);
+                    // if (index !== -1){
+                    //     this.cart.splice(index, 1);
+                    //     fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
+                    //         method: "PUT",
+                    //         headers: { "Content-Type": "application/json" },
+                    //         body: JSON.stringify({ availableSeats: lesson.availableSeats + 1})
+                    //     })
+                    //     .then(r => r.json())
+                    //     .then(console.log)
+                    //     .catch(console.error);
+                    // }
+                    let newSeats = lesson.originalSeats - this.cartCount(lesson.id) + 1;
+                    fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ availableSeats: lesson.availableSeats + 1})
+                    })
+                    lesson.originalSeats = newSeats;
                 }
             },
             computed: {
