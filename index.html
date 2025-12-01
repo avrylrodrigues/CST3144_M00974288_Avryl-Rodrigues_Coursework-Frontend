@@ -151,6 +151,8 @@
                 showLesson: true,
                 // Selected filter type
                 filterType: "",
+                // Prevents rapid clicks
+                isUpdating: false,
                 // Sort order
                 sortOrder: "ascending",
                 // Customer order info
@@ -189,8 +191,9 @@
                 },
                 // Add lesson to cart
                 addToCart(lesson){
-                    if (!this.canAddToCart(lesson)) return;  // Prevent invalid adds
-                    this.cart.push(lesson.id);
+                    if (!this.canAddToCart(lesson) || this.isUpdating) return;  // Prevent invalid/rapid adds
+                    this.isUpdating = true;
+                    this.cart.push(lesson.id);  // Optimistic add
                     fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                         method: "PUT",
                         headers: {"Content-Type": "application/json"},
@@ -199,13 +202,13 @@
                     .then(r => r.json())
                     .then(resJSON => {
                         console.log(resJSON);
-                        // Refetch to sync with DB
-                        this.fetchLessons();
+                        this.fetchLessons();  // Refetch after success
+                        this.isUpdating = false;
                     })
                     .catch(err => {
                         console.error(err);
-                        // Revert cart on failure
-                        this.cart.pop();
+                        this.cart.pop();  // Revert on failure
+                        this.isUpdating = false;
                     });
                 },
                 // Toggle between lesson and checkout view
@@ -284,9 +287,11 @@
                 },
                 // Remove a lesson from cart
                 removeFromCart(lesson){
+                    if (this.isUpdating) return;  // Prevent during updates
                     const index = this.cart.indexOf(lesson.id);
                     if (index === -1) return;
-                    this.cart.splice(index, 1);
+                    this.isUpdating = true;
+                    this.cart.splice(index, 1);  // Optimistic remove
                     fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                         method: "PUT",
                         headers: { "Content-Type": "application/json" },
@@ -295,13 +300,13 @@
                     .then(r => r.json())
                     .then(resJSON => {
                         console.log(resJSON);
-                        // Refetch to sync with DB
-                        this.fetchLessons();
+                        this.fetchLessons();  // Refetch after success
+                        this.isUpdating = false;
                     })
                     .catch(err => {
                         console.error(err);
-                        // Revert cart on failure
-                        this.cart.splice(index, 0, lesson.id);
+                        this.cart.splice(index, 0, lesson.id);  // Revert on failure
+                        this.isUpdating = false;
                     });
                 }
             },
