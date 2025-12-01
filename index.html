@@ -58,7 +58,7 @@
                     <h2 v-text="lesson.Subject"></h2>
                     <p> Location: {{lesson.Location}} </p>
                     <p> Price: {{lesson.Price}} </p>
-                    <p> Available seats: {{lesson.availableSeats - cartCount(lesson.id)}} </p>
+                    <p> Available seats: {{lesson.availableSeats}} </p>
 
                     <!-- Add to cart button -->
                     <button v-on:click="addToCart(lesson)" v-if="canAddToCart(lesson)">
@@ -185,6 +185,8 @@
                     .then(r => r.json())
                     .then(resJSON => {
                         console.log(resJSON);
+                        // Update local data to match the DB
+                        lesson.availableSeats -= 1;
                     })
                     .catch(console.error);
                 },
@@ -273,7 +275,11 @@
                             body: JSON.stringify({ availableSeats: lesson.availableSeats + 1})
                         })
                         .then(r => r.json())
-                        .then(console.log)
+                        .then(resJSON => {
+                            console.log(resJSON);
+                            // Update local data to match the DB
+                            lesson.availableSeats += 1;
+                        })
                         .catch(console.error);
                     }
                 }
