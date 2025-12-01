@@ -180,7 +180,15 @@
                         method: "PUT",
                         headers: {"Content-Type": "application/json"},
                         body: JSON.stringify({ availableSeats: lesson.availableSeats - 1})
-                    });
+                    })
+                    .then(response => response.json())
+                    .then(updatedLesson => {
+                        // Update the local lesson object with the latest seats from the backend
+                        lesson.availableSeats = updatedLesson.availableSeats;
+                        // Add lesson to cart
+                        this.cart.push(lesson.id);
+                    })
+                    .catch(err => console.error("Error updating seats:", err));
                 },
                 // Toggle between lesson and checkout view
                 showCheckout(){
@@ -252,7 +260,16 @@
                         method: "PUT",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ availableSeats: lesson.availableSeats + 1})
-                    });
+                    })
+                    .then(response => response.json())
+                    .then(updatedLesson => {
+                        // Update the local lesson object
+                        lesson.availableSeats = updatedLesson.availableSeats;
+                        // Remove from cart
+                        let index = this.cart.indexOf(lesson.id);
+                        if (index > -1) this.cart.splice(index, 1);
+                    })
+                    .catch(err => console.error("Error updating seats:", err));
                 }
             },
             computed: {
