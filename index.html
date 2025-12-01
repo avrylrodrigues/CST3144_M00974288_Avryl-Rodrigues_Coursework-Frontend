@@ -176,7 +176,7 @@
             methods: {
                 // Add lesson to cart
                 addToCart(lesson){
-                    // this.cart.push(lesson.id);
+                    this.cart.push(lesson.id);
                     let newSeats = lesson.originalSeats - this.cartCount(lesson.id) - 1;
                     fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                         method: "PUT",
