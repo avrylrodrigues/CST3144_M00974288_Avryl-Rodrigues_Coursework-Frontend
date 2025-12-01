@@ -74,7 +74,7 @@
                             All Full!
                         </span>
                         <span v-else-if="lesson.availableSeats - cartCount(lesson.id) < 5">
-                            Only {{lesson.availableSeats - cartCount(lesson.id)}} seats left!
+                            Only {{lesson.availableSeats}} seats left!
                         </span>
                         <span v-else>
                             Book Now!
@@ -180,9 +180,6 @@
                         method: "PUT",
                         headers: {"Content-Type": "application/json"},
                         body: JSON.stringify({ availableSeats: lesson.availableSeats - 1 })
-                    })
-                    .then(() => {
-                        lesson.availableSeats -= 1;
                     });
                 },
                 // Toggle between lesson and checkout view
@@ -255,11 +252,8 @@
                         method: "PUT",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ availableSeats: lesson.availableSeats + 1 })
-                    })
-                    .then(() => {
-                        lesson.availableSeats += 1;
                     });
-                    }
+                }
             },
             computed: {
                 // Return number of items in cart
