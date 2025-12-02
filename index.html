@@ -219,6 +219,8 @@
                     })
                     .then(result => {
                         console.log("PUT Response JSON:", result);
+                        // Update the local lesson object
+                        lesson.availableSeats = newSeatValue;
                         console.log("DB should now have:", newSeatValue);
                     })
                     .catch(err => {
