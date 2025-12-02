@@ -70,11 +70,11 @@
 
                     <!-- Update messages based on seat availability -->
                     <div class="update-messages">
-                        <span v-if="lesson.availableSeats <= 0">
+                        <span v-if="lesson.availableSeats - cartCount(lesson.id) <= 0">
                             All Full!
                         </span>
-                        <span v-else-if="lesson.availableSeats < 5">
-                            Only {{lesson.availableSeats}} seats left!
+                        <span v-else-if="lesson.availableSeats - cartCount(lesson.id) < 5">
+                            Only {{lesson.availableSeats - cartCount(lesson.id)}} seats left!
                         </span>
                         <span v-else>
                             Book Now!
