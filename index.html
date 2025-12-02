@@ -58,7 +58,7 @@
                     <h2 v-text="lesson.Subject"></h2>
                     <p> Location: {{lesson.Location}} </p>
                     <p> Price: {{lesson.Price}} </p>
-                    <p> Available seats: {{lesson.availableSeats - cartCount(lesson.id)}} </p>
+                    <p> Available seats: {{lesson.availableSeats}} </p>
 
                     <!-- Add to cart button -->
                     <button v-on:click="addToCart(lesson)" v-if="canAddToCart(lesson)">
@@ -283,7 +283,7 @@
                 },
                 // Check if lesson can be added to cart based on available seats
                 canAddToCart(lesson){
-                    return lesson.availableSeats > this.cartCount(lesson.id);
+                    return lesson.availableSeats > 0;
                 },
                 // Count number of a specific lessons in cart
                 cartCount(id){
