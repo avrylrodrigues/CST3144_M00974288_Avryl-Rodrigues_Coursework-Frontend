@@ -162,31 +162,59 @@
             },
             // Fetch lessons from the backend
             created(){
+                console.log(">>> ABOUT TO FETCH FRESH LESSON DATA FROM SERVER");
+                console.log("GET URL used:", "/lessons?" + Date.now());
                 fetch("https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons")
-                    .then(response => response.json())
+                    .then(response => {
+                        console.log("GET Response Headers:", [...response.headers.entries()]);
+                        return response.json();
+                    })
                     .then(data => {
+                        console.log("GET Response JSON:", data);
                         this.lessons = data.map(lesson =>({
                             ...lesson,
                             originalSeats: lesson.availableSeats,
                             Icon:"https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/" + lesson.Icon
                         }));
+                        console.log("CONFIRMATION → Fresh DB seats actually received from server:");
+                        data.forEach(l => console.log(l.Subject, "→", l.availableSeats));
                     })
                     .catch(err => console.error("Error fetching lessons:", err));
             },
             methods: {
                 // Add lesson to cart
                 addToCart(lesson){
+                    console.log("---------------------------------------------------");
+                    console.log("ADDING TO CART: ", lesson.Subject);
+                    console.log("Before click -> DB availableSeats:", lesson.availableSeats);
+                    console.log("cartCount for this lesson BEFORE:", this.cartCount(lesson.id));
+
+                    // Value you're about to send to backend
                     const newSeatValue = lesson.availableSeats - 1;
+                    console.log("PUT request will send availableSeats =", newSeatValue);
+
+                    // Push to cart FIRST
                     this.cart.push(lesson.id);
+                    console.log("Cart AFTER PUSH:", this.cart);
+                    console.log("cartCount after push:", this.cartCount(lesson.id));
+                    console.log("UI remaining seats should show:",
+                        lesson.availableSeats - this.cartCount(lesson.id)
+                    );
+
                     fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                         method: "PUT",
                         headers: {"Content-Type": "application/json"},
                         body: JSON.stringify({ availableSeats: newSeatValue })
                     })
-                    .then(res => res.json())
+                    .then(res => {
+                        console.log("PUT Response status:", res.status);
+                        return res.json();
+                    })
                     .then(result => {
+                        console.log("PUT Response JSON:", result);
                         // Update the local lesson object
                         lesson.availableSeats = newSeatValue;
+                        console.log("DB should now have:", newSeatValue);
                     })
                     .catch(err => {
                         console.error("PUT ERROR:", err);
@@ -268,17 +296,37 @@
                 },
                 // Remove lesson from cart
                 removeFromCart(lesson){
+                    console.log("---------------------------------------------------");
+                    console.log("REMOVING FROM CART:", lesson.Subject);
+                    console.log("Before removal -> DB availableSeats:", lesson.availableSeats);
+                    console.log("cartCount for this lesson BEFORE:", this.cartCount(lesson.id));
+
                     const index = this.cart.indexOf(lesson.id);
-                    if (index !== -1) {
-                        this.cart.splice(index, 1);
+                    if (index === -1){
+                        console.log("Warning: Tried to remove item not in cart!");
+                        return;
                     }
+
+                    this.cart.splice(index, 1);
+                    console.log("Cart AFTER REMOVE:", this.cart);
+                    console.log("cartCount after removal:", this.cartCount(lesson.id));
+
                     const updatedSeats = lesson.availableSeats + 1;
+                    console.log("PUT request will send availableSeats =", updatedSeats);
+
                     fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                         method: "PUT",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ availableSeats: updatedSeats })
                     })
-                    .then(res => res.json())
+                    .then(res => {
+                        console.log("PUT Response status:", res.status);
+                        return res.json();
+                    })
+                    .then(result => {
+                        console.log("PUT Response JSON:", result);
+                        console.log("DB should now have:", updatedSeats);
+                    })
                     .catch(err => {
                         console.error("PUT ERROR:", err);
                     });
