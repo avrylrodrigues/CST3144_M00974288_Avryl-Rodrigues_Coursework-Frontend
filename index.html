@@ -70,15 +70,7 @@
 
                     <!-- Update messages based on seat availability -->
                     <div class="update-messages">
-                        <span v-if="lesson.availableSeats - cartCount(lesson.id) <= 0">
-                            All Full!
-                        </span>
-                        <span v-else-if="lesson.availableSeats - cartCount(lesson.id) < 5">
-                            Only {{lesson.availableSeats - cartCount(lesson.id)}} seats left!
-                        </span>
-                        <span v-else>
-                            Book Now!
-                        </span>
+                        <span>{{ seatMessage(lesson) }}</span>
                     </div>
                 </div>
             </div>
@@ -330,6 +322,23 @@
                     .catch(err => {
                         console.error("PUT ERROR:", err);
                     });
+                },
+                seatMessage(lesson) {
+                    const remainingSeats = lesson.availableSeats - this.cartCount(lesson.id);
+                    let message = "";
+                    if (remainingSeats <= 0) {
+                        message = "All Full!";
+                    } else if (remainingSeats < 5) {
+                        message = `Only ${remainingSeats} seats left!`;
+                    } else {
+                        message = "Book Now!";
+                    }
+                    console.log(`Lesson: ${lesson.Subject}`);
+                    console.log(`Available Seats: ${lesson.availableSeats}`);
+                    console.log(`Cart Count: ${this.cartCount(lesson.id)}`);
+                    console.log(`Remaining Seats: ${remainingSeats}`);
+                    console.log(`Message displayed: ${message}`);
+                    return message;
                 }
             },
             computed: {
