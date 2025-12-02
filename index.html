@@ -70,7 +70,15 @@
 
                     <!-- Update messages based on seat availability -->
                     <div class="update-messages">
-                        <span>{{ seatMessage(lesson) }}</span>
+                        <span v-if="lesson.availableSeats <= 0">
+                            All Full!
+                        </span>
+                        <span v-else-if="lesson.availableSeats < 5">
+                            Only {{lesson.availableSeats}} seats left!
+                        </span>
+                        <span v-else>
+                            Book Now!
+                        </span>
                     </div>
                 </div>
             </div>
@@ -176,6 +184,7 @@
             methods: {
                 // Add lesson to cart
                 addToCart(lesson){
+                    if(lesson.availableSeats <= 0) return;
                     console.log("---------------------------------------------------");
                     console.log("ADDING TO CART: ", lesson.Subject);
                     console.log("Before click -> DB availableSeats:", lesson.availableSeats);
@@ -323,23 +332,6 @@
                         console.error("PUT ERROR:", err);
                     });
                 },
-                seatMessage(lesson) {
-                    const remainingSeats = lesson.availableSeats - this.cartCount(lesson.id);
-                    let message = "";
-                    if (remainingSeats <= 0) {
-                        message = "All Full!";
-                    } else if (remainingSeats < 5) {
-                        message = `Only ${remainingSeats} seats left!`;
-                    } else {
-                        message = "Book Now!";
-                    }
-                    console.log(`Lesson: ${lesson.Subject}`);
-                    console.log(`Available Seats: ${lesson.availableSeats}`);
-                    console.log(`Cart Count: ${this.cartCount(lesson.id)}`);
-                    console.log(`Remaining Seats: ${remainingSeats}`);
-                    console.log(`Message displayed: ${message}`);
-                    return message;
-                }
             },
             computed: {
                 // Return number of items in cart
