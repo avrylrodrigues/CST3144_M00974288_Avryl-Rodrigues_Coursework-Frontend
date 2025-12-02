@@ -169,17 +169,22 @@
             },
             // Fetch lessons from the backend
             created(){
-                fetch("https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons", {
-                    method: "GET",
-                    cache: "no-store"
-                })
-                    .then(response => response.json())
+                console.log(">>> ABOUT TO FETCH FRESH LESSON DATA FROM SERVER");
+                console.log("GET URL used:", "/lessons?" + Date.now());
+                fetch("https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons")
+                    .then(response => {
+                        console.log("GET Response Headers:", [...response.headers.entries()]);
+                        return response.json();
+                    })
                     .then(data => {
+                        console.log("GET Response JSON:", data);
                         this.lessons = data.map(lesson =>({
                             ...lesson,
                             originalSeats: lesson.availableSeats,
                             Icon:"https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/" + lesson.Icon
                         }));
+                        console.log("CONFIRMATION → Fresh DB seats actually received from server:");
+                        data.forEach(l => console.log(l.Subject, "→", l.availableSeats));
                     })
                     .catch(err => console.error("Error fetching lessons:", err));
             },
@@ -206,7 +211,6 @@
                     fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                         method: "PUT",
                         headers: {"Content-Type": "application/json"},
-                        cache: "no-store",
                         body: JSON.stringify({ availableSeats: newSeatValue })
                     })
                     .then(res => {
@@ -248,7 +252,6 @@
                     fetch("https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Orders", {
                         method: "POST",
                         headers: {"Content-Type": "application/json"},
-                        cache: "no-store",
                         body: JSON.stringify(order)
                     })
                     .then(() => {
@@ -258,7 +261,6 @@
                             return fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                                 method: "PUT",
                                 headers: {"Content-Type": "application/json"},
-                                cache: "no-store",
                                 body: JSON.stringify({ availableSeats: 5 })
                             });
                         });
@@ -320,7 +322,6 @@
                     fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
                         method: "PUT",
                         headers: { "Content-Type": "application/json" },
-                        cache: "no-store",
                         body: JSON.stringify({ availableSeats: updatedSeats })
                     })
                     .then(res => {
