@@ -212,6 +212,7 @@ input[type="radio"]{
     cursor: pointer;
 }
 
+/* Search bar */
 .search-bar-container {
     width: 100%;
     display: flex;
