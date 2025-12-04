@@ -414,8 +414,10 @@
                     }
                     return lessonsInCart;
                 },
-                displayLessons(){
-                    return this.searchResults !== null ? this.searchResults : this.Lessons;
+                displayLessons() {
+                    console.log("SEARCH RESULTS:", this.searchResults);
+                    console.log("FULL LESSON LIST:", this.lessons);
+                    return this.searchResults !== null ? this.searchResults : this.lessons;
                 }
             }
         });
