@@ -303,6 +303,7 @@
                         console.error("PUT ERROR:", err);
                     });
                 },
+                // Search for lessons based on the input
                 searchLessons() {
                     if (this.searchText.trim() === "") {
                         this.searchResults = null;
@@ -414,10 +415,11 @@
                     }
                     return lessonsInCart;
                 },
+                // Displays the search results
                 displayLessons() {
                     console.log("SEARCH RESULTS:", this.searchResults);
                     console.log("FULL LESSON LIST:", this.lessons);
-                    return this.searchResults !== null ? this.searchResults : this.lessons;
+                    return this.searchResults !== null ? this.searchResults : this.sortedLessons;
                 }
             }
         });
