@@ -25,6 +25,15 @@
         </header>
 
         <main>
+            <!-- Search Bar -->
+            <div class="search-container" v-if="showLesson">
+                <input 
+                    type="text" 
+                    v-model="searchText" 
+                    placeholder="Search..."
+                    @input="searchLessons"
+                >
+            </div>
             <!-- Filter and Sort options -->
             <div class="filter-sort-container" v-if="showLesson">
                 <!-- Filter section -->
@@ -49,7 +58,7 @@
 
             <!-- Lessons -->
             <div v-if="showLesson" class="lesson-container">
-                <div v-for="lesson in sortedLessons" class="lesson-box">
+                <div v-for="lesson in displayLessons" class="lesson-box">
                     <figure>
                         <!-- Lesson icon -->
                         <img v-bind:src="lesson.Icon" width="150" height="150">
@@ -153,6 +162,8 @@
                 filterType: "",
                 // Sort order
                 sortOrder: "ascending",
+                searchText: "",
+                searchResults: null,
                 // Customer order info
                 order:{
                     fullName: "",
@@ -290,6 +301,22 @@
                     .catch(err => {
                         console.error("PUT ERROR:", err);
                     });
+                },
+                searchLessons() {
+                    if (this.searchText.trim() === "") {
+                        this.searchResults = null;
+                        return;
+                    }
+                    fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/search?q=${this.searchText}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            this.searchResults = data.map(lesson => ({
+                                ...lesson,
+                                originalSeats: lesson.availableSeats,
+                                Icon: "https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/" + lesson.Icon
+                            }));
+                        })
+                        .catch(err => console.error("Search error:", err));
                 }
             },
             computed: {
@@ -385,6 +412,11 @@
                             lessonsInCart.push(lesson);
                     }
                     return lessonsInCart;
+                },
+                displayLessons(){
+                    return this.searchResults !== null
+                        ? this.searchResults
+                        : this.sortedLessons;
                 }
             }
         });
