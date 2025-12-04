@@ -26,11 +26,12 @@
 
         <main>
             <!-- Search Bar -->
-            <div class="search-container" v-if="showLesson">
+            <div class="search-bar-container" v-if="showLesson">
                 <input 
                     type="text" 
                     v-model="searchText" 
                     placeholder="Search..."
+                    class="search-bar"
                     @input="searchLessons"
                 >
             </div>
