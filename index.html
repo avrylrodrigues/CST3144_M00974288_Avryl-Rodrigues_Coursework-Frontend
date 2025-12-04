@@ -305,13 +305,18 @@
                 },
                 // Search for lessons based on the input
                 searchLessons() {
-                    if (this.searchText.trim() === "") {
-                        this.searchResults = null;
-                        return;
+                    const query = this.searchText.trim();
+                    // Log 1: Show what the user searched for
+                    console.log(`Search Query: "${query}"`); 
+                    if (query === "") {
+                        this.searchResults = null; 
+                        return; 
                     }
-                    fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/search?q=${this.searchText}`)
+                    fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/search?q=${query}`)
                         .then(res => res.json())
                         .then(data => {
+                            // Log 2: Show how many results the backend returned
+                            console.log(`Backend returned ${data.length} results.`); 
                             this.searchResults = data.map(lesson => ({
                                 ...lesson,
                                 originalSeats: lesson.availableSeats,
