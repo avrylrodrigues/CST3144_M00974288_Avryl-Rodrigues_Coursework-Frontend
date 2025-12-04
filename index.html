@@ -306,7 +306,6 @@
                 // Search for lessons based on the input
                 searchLessons() {
                     const query = this.searchText.trim();
-                    // Log 1: Show what the user searched for
                     console.log(`Search Query: "${query}"`); 
                     if (query === "") {
                         this.searchResults = null; 
@@ -315,13 +314,11 @@
                     fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/search?q=${query}`)
                         .then(res => res.json())
                         .then(data => {
-                            // Log 2: Show how many results the backend returned
-                            console.log(`Backend returned ${data.length} results.`); 
-                            this.searchResults = data.map(lesson => ({
-                                ...lesson,
-                                originalSeats: lesson.availableSeats,
-                                Icon: "https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/" + lesson.Icon
-                            }));
+                            const searchLessonIds = data.map(lesson => lesson._id);
+                            this.searchResults = this.lessons.filter(lesson => 
+                                searchLessonIds.includes(lesson._id)
+                            );
+                            console.log(`Linked Search Results count: ${this.searchResults.length}`);
                         })
                         .catch(err => console.error("Search error:", err));
                 }
