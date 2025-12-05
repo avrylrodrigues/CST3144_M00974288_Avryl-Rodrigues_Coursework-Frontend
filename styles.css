@@ -213,14 +213,14 @@ input[type="radio"]{
 }
 
 /* Search bar */
-.search-bar-container {
+.search-bar-container{
     width: 100%;
     display: flex;
     justify-content: center;
     margin: 20px 0;
 }
 
-.search-bar {
+.search-bar{
     width: 70%;
     padding: 12px 15px;
     border-radius: 8px;
@@ -231,8 +231,9 @@ input[type="radio"]{
     color: #ffffff;
     font-size: 18px;
     font-family: "Bookman Old Style", serif;
+    cursor: pointer;
 }
 
-.search-bar::placeholder {
+.search-bar::placeholder{
     color: #f3eaff;
 }

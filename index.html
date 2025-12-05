@@ -306,9 +306,9 @@
                     });
                 },
                 // Search for lessons based on the input
-                searchLessons() {
+                searchLessons(){
                     const query = this.searchText.trim();
-                    if (query === "") {
+                    if (query === ""){
                         this.searchResults = null; 
                         return; 
                     }
@@ -418,9 +418,7 @@
                     return lessonsInCart;
                 },
                 // Displays the search results
-                displayLessons() {
-                    console.log("SEARCH RESULTS:", this.searchResults);
-                    console.log("FULL LESSON LIST:", this.lessons);
+                displayLessons(){
                     return this.searchResults !== null ? this.searchResults : this.sortedLessons;
                 }
             }
