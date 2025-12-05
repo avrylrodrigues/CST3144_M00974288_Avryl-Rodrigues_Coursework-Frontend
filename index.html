@@ -308,7 +308,6 @@
                 // Search for lessons based on the input
                 searchLessons() {
                     const query = this.searchText.trim();
-                    console.log(`Search Query: "${query}"`); 
                     if (query === "") {
                         this.searchResults = null; 
                         return; 
@@ -320,7 +319,6 @@
                             this.searchResults = this.lessons.filter(lesson => 
                                 searchLessonIds.includes(lesson._id)
                             );
-                            console.log(`Linked Search Results count: ${this.searchResults.length}`);
                         })
                         .catch(err => console.error("Search error:", err));
                 }
