@@ -240,18 +240,6 @@
                         body: JSON.stringify(order)
                     })
                     .then(() => {
-                        alert("Registration successful!");
-                        // Reset seats in database
-                        let resetSeats = this.lessons.map(lesson => {
-                            return fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/collection/Lessons/${lesson._id}`, {
-                                method: "PUT",
-                                headers: {"Content-Type": "application/json"},
-                                body: JSON.stringify({ availableSeats: 5 })
-                            });
-                        });
-                        return Promise.all(resetSeats);
-                    })
-                    .then(() => {
                         // Clear cart and form
                         this.cart = [];
                         this.order.fullName = "";
