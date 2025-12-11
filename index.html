@@ -27,9 +27,9 @@
         <main>
             <!-- Search Bar -->
             <div class="search-bar-container" v-if="showLesson">
-                <input 
-                    type="text" 
-                    v-model="searchText" 
+                <input
+                    type="text"
+                    v-model="searchText"
                     placeholder="Search..."
                     class="search-bar"
                     @input="searchLessons"
@@ -299,18 +299,18 @@
                 searchLessons(){
                     const query = this.searchText.trim();
                     if (query === ""){
-                        this.searchResults = null; 
-                        return; 
+                        this.searchResults = null;
+                        return;
                     }
                     fetch(`https://cst3144-m00974288-avryl-rodrigues-f2e9.onrender.com/search?q=${query}`)
-                        .then(res => res.json())
-                        .then(data => {
+                    .then(res => res.json())
+                    .then(data => {
                             const searchLessonIds = data.map(lesson => lesson._id);
-                            this.searchResults = this.lessons.filter(lesson => 
+                            this.searchResults = this.lessons.filter(lesson =>
                                 searchLessonIds.includes(lesson._id)
                             );
                         })
-                        .catch(err => console.error("Search error:", err));
+                    .catch(err => console.error("Search error:", err));
                 }
             },
             computed: {
